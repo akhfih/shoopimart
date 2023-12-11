@@ -42,6 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         assert customer != null;
         return CustomerResponse.builder()
+                .id(customer.getId())
                 .name(customer.getName())
                 .address(customer.getAddress())
                 .mobilePhone(customer.getMobilePhone())
@@ -54,6 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> customers = customerRepository.findAll();
 
         return  customers.stream().map(customer -> CustomerResponse.builder()
+                .id(customer.getId())
                 .name(customer.getName())
                 .address(customer.getAddress())
                 .mobilePhone(customer.getMobilePhone())
@@ -67,6 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerResponse currentCustomerId = getById(customerRequest.getId());
         if(currentCustomerId!=null){
             Customer customer = Customer.builder()
+                    .id(customerRequest.getId())
                     .name(customerRequest.getName())
                     .address(customerRequest.getAddress())
                     .mobilePhone(customerRequest.getMobilePhone())
@@ -74,6 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
                     .build();
             customerRepository.save(customer);
             return CustomerResponse.builder()
+                    .id(customer.getId())
                     .name(customer.getName())
                     .address(customer.getAddress())
                     .mobilePhone(customer.getMobilePhone())

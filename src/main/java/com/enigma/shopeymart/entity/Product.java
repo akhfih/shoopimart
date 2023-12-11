@@ -11,19 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "m_customer")
-public class Customer {
+@Table(name = "m_product")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(name = "name", unique = false, nullable = false, length = 30)
     private String name;
-    @Column(name = "address", unique = false, nullable = false, length = 100)
-    private String address;
-    @Column(name = "mobile_phone", unique = true, nullable = false, length = 30)
-    private String mobilePhone;
-    @Column(name = "email", unique = true, nullable = false, length = 30)
-    private String email;
 
+    @Column(name = "description", unique = false, nullable = false, length = 100)
+    private String description;
 }
