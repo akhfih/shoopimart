@@ -50,21 +50,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getAll() {
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(
-                product -> ProductResponse.builder()
-                        .id(product.getId())
-                        .nameProduct(product.getName())
-                        .description(product.getDescription())
-                        .build()).collect(Collectors.toList());
+    public List<Product> getAll() {
+        return productRepository.findAll();
+//        List<Product> products = productRepository.findAll();
+//        return products.stream().map(
+//                product -> ProductResponse.builder()
+//                        .id(product.getId())
+//                        .nameProduct(product.getName())
+//                        .description(product.getDescription())
+//                        .productPriceList(product.getProductPriceList())
+//                        .build()).collect(Collectors.toList());
 
     }
 
     @Override
     public ProductResponse update(ProductRequest productRequest) {
         ProductResponse currentCustomerId = getById(productRequest.getProductId());
-        if(currentCustomerId!=null){
+        if (currentCustomerId != null) {
             Product product = Product.builder()
                     .name(productRequest.getProductName())
                     .description(productRequest.getDescription()).build();
@@ -79,10 +81,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(String id) {
-    productRepository.deleteById(id);
+        productRepository.deleteById(id);
     }
 
-    @Transactional(rollbackOn = Exception.class)// jika semua gagal akan diexception rollback
+    @Transactional(rollbackOn = Exception.class)// jika semua gagal akan diexception ro
     @Override
     public ProductResponse createProductAndProductPrice(ProductRequest productRequest) {
 
@@ -108,12 +110,14 @@ public class ProductServiceImpl implements ProductService {
                 .id(product.getId())
                 .nameProduct(product.getName())
                 .description(product.getDescription())
-                .price(productPrice.getPrice())
-                .stock(productPrice.getStock())
+                .price(productRequest.getPrice())
+                .stock(productRequest.getStock())
                 .store(StoreResponse.builder()
                         .id(store.getId())
-                        .storeName(store.getName())
                         .noSiup(store.getNoSiup())
+                        .storeName(store.getName())
+                        .address(store.getAddress())
+                        .phone(store.getMobilePhone())
                         .build())
                 .build();
 

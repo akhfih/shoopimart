@@ -12,6 +12,6 @@ public class ProductPriceServiceImpl implements ProductPriceService {
     private final ProductPriceRepository productPriceRepository;
     @Override
     public ProductPrice create(ProductPrice productPrice) {
-        return null;
+        return productPriceRepository.save(productPrice);
     }
 }

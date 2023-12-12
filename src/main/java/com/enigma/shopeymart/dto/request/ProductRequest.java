@@ -21,7 +21,7 @@ public class ProductRequest {
     @NotBlank(message = "product description is required")
     private String description;
 
-    @NotBlank(message = "product pirce is required")
+    @NotBlank(message = "product price is required")
     @Min(value = 0, message = "Stock must be greater than equal 0")
     private Long price;
 
