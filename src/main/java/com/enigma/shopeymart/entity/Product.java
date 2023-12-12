@@ -26,6 +26,6 @@ public class Product {
     private String description;
 
     @OneToMany(mappedBy = "product")
-    private List<ProductPrice> productPriceList;
+    private List<ProductPrice> productPrices;
 
 }
