@@ -1,17 +1,17 @@
 package com.enigma.shopeymart.dto.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
-public class CommonResponse <T>{
-    private Integer statusCode;
-    private String message;
-    private T data;
-    private PagingResponse paging;
+public class PagingResponse {
+    private Integer currentPage;
+    private Integer totalPage;
+    private Integer size;
 }

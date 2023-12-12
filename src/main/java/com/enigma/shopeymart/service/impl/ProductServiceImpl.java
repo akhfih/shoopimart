@@ -31,6 +31,10 @@ public class ProductServiceImpl implements ProductService {
                 .name(productRequest.getProductName())
                 .description(productRequest.getDescription()).build();
         productRepository.save(product);
+        return getResponse(product);
+    }
+
+    private static ProductResponse getResponse(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
                 .nameProduct(product.getName())
@@ -39,14 +43,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getById(String id) {
-        Product product = productRepository.findById(id).orElse(null);
+        Product product = productRepository.findById(id).get();
+        if(product != null){
+            return ProductResponse.builder()
+                    .id(product.getId())
+                    .nameProduct(product.getName())
+                    .description(product.getDescription()).build();
+        }
 
-        assert product != null;
-        return ProductResponse.builder()
-                .id(product.getId())
-                .nameProduct(product.getName())
-                .description(product.getDescription())
-                .build();
+        return null;
     }
 
     @Override
@@ -71,10 +76,7 @@ public class ProductServiceImpl implements ProductService {
                     .name(productRequest.getProductName())
                     .description(productRequest.getDescription()).build();
             productRepository.save(product);
-            return ProductResponse.builder()
-                    .id(product.getId())
-                    .nameProduct(product.getName())
-                    .description(product.getDescription()).build();
+            return getResponse(product);
         }
         return null;
     }
