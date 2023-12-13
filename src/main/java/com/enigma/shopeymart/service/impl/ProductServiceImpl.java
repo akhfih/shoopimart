@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    @Transactional(rollbackOn = Exception.class)// jika semua gagal akan diexception ro
+    @Transactional(rollbackOn = Exception.class)// jika semua gagal akan diexception rollback
     @Override
     public ProductResponse createProductAndProductPrice(ProductRequest productRequest) {
 
