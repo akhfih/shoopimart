@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.enigma.shopeymart.entity.AppUser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -20,37 +21,43 @@ public class JwtUtil {
     //getDataByUsername
     //validation
 
-    private final String jwtSecret = "secret";
-    private final String appName = "Shopee Mart Application";
+    @Value("${app.shopeemart.jwt.jwt-secret}")
+    private String jwtSecret;
 
-    public String generateToken(AppUser appUser){
+    @Value("${app.shopeemart.jwt.app-name}")
+    private String appName;
+
+    @Value("${app.shopeemart.jwt.jwtExpirationInSecon}")
+    private long jwtEcpirationInSecond;
+
+    public String generateToken(AppUser appUser) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes(StandardCharsets.UTF_8));
             String token = JWT.create()
                     .withIssuer(appName) // info untuk application nama yg kita buat
                     .withSubject(appUser.getId()) // menentukan object yang akan dibuat biasanya dari ID
-                    .withExpiresAt(Instant.now().plusSeconds(60)) // menetapkan waktu kadaluarsa token natni, dalam sini kadaluarsanya adalah 60 detik setelah dibuat
+                    .withExpiresAt(Instant.now().plusSeconds(jwtEcpirationInSecond)) // menetapkan waktu kadaluarsa token natni, dalam sini kadaluarsanya adalah 60 detik setelah dibuat
                     .withIssuedAt(Instant.now()) // menetapkan waktu token kapan dibuat
                     .withClaim("role", appUser.getRole().name()) //menambahkan claim atau info nama pengguna
                     .sign(algorithm); // ini tu jelasinya gimana ya? intinya ini tu untuk seperti ttd kontrak bahwa algoritma yang kita pakai itu udah pasti HMAC256
             return token;
-        }catch (JWTCreationException e){
+        } catch (JWTCreationException e) {
             throw new RuntimeException();
         }
     }
 
-    public boolean verifyJwtToken(String token){
+    public boolean verifyJwtToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes(StandardCharsets.UTF_8));
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             return decodedJWT.getIssuer().equals(appName);
-        }catch (JWTVerificationException e){
-            throw  new RuntimeException();
+        } catch (JWTVerificationException e) {
+            throw new RuntimeException();
         }
     }
 
-    public Map<String, String> getUserInfoByToken(String token){
+    public Map<String, String> getUserInfoByToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes(StandardCharsets.UTF_8));
             JWTVerifier verifier = JWT.require(algorithm).build();
@@ -58,10 +65,10 @@ public class JwtUtil {
 
             Map<String, String> userInfo = new HashMap<>();
             userInfo.put("userId", decodedJWT.getSubject());
-            userInfo.put("role",decodedJWT.getClaim("role").asString());
+            userInfo.put("role", decodedJWT.getClaim("role").asString());
             return userInfo;
-        }catch (JWTVerificationException e){
-            throw  new RuntimeException();
+        } catch (JWTVerificationException e) {
+            throw new RuntimeException();
         }
     }
 }
