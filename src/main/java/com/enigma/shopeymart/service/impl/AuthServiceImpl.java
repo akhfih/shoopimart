@@ -6,12 +6,11 @@ import com.enigma.shopeymart.constant.ERole;
 import com.enigma.shopeymart.dto.request.AuthRequest;
 import com.enigma.shopeymart.dto.response.LoginResponse;
 import com.enigma.shopeymart.dto.response.RegisterResponse;
-import com.enigma.shopeymart.entity.AppUser;
-import com.enigma.shopeymart.entity.Customer;
-import com.enigma.shopeymart.entity.Role;
-import com.enigma.shopeymart.entity.UserCredential;
+import com.enigma.shopeymart.entity.*;
+import com.enigma.shopeymart.repository.AdminRepository;
 import com.enigma.shopeymart.repository.UserCredentialRepository;
 import com.enigma.shopeymart.security.JwtUtil;
+import com.enigma.shopeymart.service.AdminService;
 import com.enigma.shopeymart.service.AuthService;
 import com.enigma.shopeymart.service.CustomerService;
 import com.enigma.shopeymart.service.RoleService;
@@ -35,6 +34,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserCredentialRepository userCredentialRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomerService customerService;
+    private final AdminRepository adminRepository;
+//    private final AdminService adminService;
     private final RoleService roleService;
     private  final ValidationUtil validationUtil;
 
@@ -103,4 +104,50 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
     }
+
+    @Override
+    public RegisterResponse registerAdmin(AuthRequest request) {
+        try {
+            validationUtil.validate(request);
+            //TODO 2 : set role
+            Role role = Role.builder()
+                    .name(ERole.ROLE_ADMIN)
+                    .build();
+            role =   roleService.getOrSave(role);
+
+            //TODO 1 : set credential
+            UserCredential userCredential = UserCredential.builder()
+                    .username(request.getUsername().toLowerCase())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(role)
+                    .build();
+            userCredentialRepository.saveAndFlush(userCredential);
+
+
+            //TODO 3 set customer
+            Admin admin = Admin.builder()
+                    .userCredential(userCredential)
+                    .name(request.getCustomerName())
+                    .email(request.getEmail())
+                    .mobilePhone(request.getMobilePhone())
+                    .address(request.getAddress())
+                    .build();
+
+            adminRepository.save(admin);
+
+            return RegisterResponse.builder()
+                    .username(userCredential.getUsername())
+                    .role(userCredential.getRole().getName().toString())
+                    .build();
+
+
+        }catch (DataIntegrityViolationException e){
+            throw  new ResponseStatusException(HttpStatus.CONFLICT, "User already exist");
+        }
+    }
+
+    /*@Override
+    public RegisterResponse registerAdmin(AuthRequest request) {
+
+    }*/
 }

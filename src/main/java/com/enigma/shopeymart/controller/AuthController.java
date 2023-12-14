@@ -21,8 +21,13 @@ public class AuthController {
         return authService.registerCustomer(request);
     }
 
+    @PostMapping("/registeradmin")
+    public RegisterResponse registerAdmin(@RequestBody AuthRequest request){
+        return authService.registerAdmin(request);
+    }
 
-    @GetMapping("/login")
+
+    @PostMapping("/login")
     public LoginResponse login(@RequestBody AuthRequest request){
      return authService.login(request);
     }

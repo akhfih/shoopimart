@@ -28,7 +28,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             //validasi token jwt
             String headerAuth = request.getHeader("Authorization");
             String token = null;
-            if(headerAuth != null && headerAuth.startsWith("Bearer")){
+            if(headerAuth != null && headerAuth.startsWith("Bearer ")){
                 token = headerAuth.substring(7);
             }
             if(token != null && jwtUtil.verifyJwtToken(token)){
