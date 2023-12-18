@@ -1,5 +1,6 @@
 package com.enigma.shopeymart.dto.request;
 
+import com.enigma.shopeymart.dto.response.StoreResponse;
 import com.enigma.shopeymart.entity.Store;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -30,7 +31,7 @@ public class ProductRequest {
     private Integer stock;
 
     @NotBlank(message = "storeId is  required")
-    private Store storeId;
+    private StoreResponse storeId;
 
 
 }
