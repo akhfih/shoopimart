@@ -36,17 +36,18 @@ public class StoreServideImpl implements StoreService {
     @Override
     public Store update(Store store) {
         Store currentStoreId = getById(store.getId());
-        if(currentStoreId!=null){
+        if (currentStoreId != null) {
             return storeRepository.save(store);
         }
-        return  null;
+        return null;
     }
 
     @Override
-    public void delete(String id) {storeRepository.deleteById(id);
+    public void delete(String id) {
+        storeRepository.deleteById(id);
     }
 
-    public StoreResponse create(StoreRequest storeRequest){
+    public StoreResponse create(StoreRequest storeRequest) {
         Store store = Store.builder()
                 .name(storeRequest.getName())
                 .noSiup(storeRequest.getNoSiup())
@@ -58,5 +59,42 @@ public class StoreServideImpl implements StoreService {
                 .storeName(store.getName())
                 .noSiup(storeRequest.getNoSiup())
                 .build();
+    }
+
+    @Override
+    public StoreResponse getById2(String id) {
+        Store store = storeRepository.findById(id).orElse(null);
+
+        return StoreResponse.builder()
+                .id(store.getId())
+                .storeName(store.getName())
+                .noSiup(store.getNoSiup())
+                .address(store.getAddress())
+                .phone(store.getMobilePhone())
+                .build();
+    }
+
+    @Override
+    public StoreResponse update2(StoreRequest storeRequest) {
+        Store currentStoreId =  storeRepository.findById(storeRequest.getId()).orElse(null);
+        if (currentStoreId != null) {
+            Store store = Store.builder()
+                    .id(storeRequest.getId())
+                    .name(storeRequest.getName())
+                    .address(storeRequest.getAddress())
+                    .noSiup(storeRequest.getNoSiup())
+                    .mobilePhone(storeRequest.getMobilePhone())
+                    .build();
+            storeRepository.save(store);
+            return StoreResponse.builder()
+                    .id(store.getId())
+                    .storeName(store.getName())
+                    .address(store.getAddress())
+                    .noSiup(store.getNoSiup())
+                    .phone(store.getMobilePhone())
+                    .build();
+        }
+        return null;
+
     }
 }

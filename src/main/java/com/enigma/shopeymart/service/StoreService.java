@@ -15,4 +15,7 @@ public interface StoreService {
     void delete (String id);
 
     StoreResponse create(StoreRequest storeRequest);
+
+    StoreResponse getById2(String id);
+    StoreResponse update2(StoreRequest storeRequest);
 }
