@@ -108,7 +108,6 @@ class StoreServideImplTest {
         Store exitingStore = new Store("1","12345","Berkah Selalu","Ragunan","085743553");
 
         when(storeRepository.findById(dummyStoreRequest.getId())).thenReturn(Optional.of(exitingStore));
-//        when(storeRepository.findById(dummyStoreRequest.getId())).thenReturn(Optional.of(exitingStore));
 
         StoreResponse storeResponse = storeService.update2(dummyStoreRequest);
 
