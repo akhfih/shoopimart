@@ -34,7 +34,7 @@ public class SecurityConfiguration {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    private static final String[] WHITE_LIST_URL = {"/api/auth/**"}; // kalo ada path ini maka tidak perlu dilakukan authentication
+    private static final String[] WHITE_LIST_URL = {"/api/auth/**", "/**"}; // kalo ada path ini maka tidak perlu dilakukan authentication
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
